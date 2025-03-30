@@ -13,5 +13,8 @@ UCLASS()
 class RPG_PRAC_API APlayerCharacter : public ACharacterBase
 {
 	GENERATED_BODY()
-	
+
+protected:
+
+	virtual void BeginPlay() override;
 };
