@@ -8,6 +8,7 @@
 #include "DataAssets/Input/DataAsset_InputConfig.h"
 #include "Components/Input/RpgInputComponent.h"
 #include "RpgGameplayTags.h"
+#include "AbilitySystem/CharacterAbilitySystemComponent.h"
 
 #include "RpgDebugHelper.h"
 
@@ -36,6 +37,19 @@ APlayerCharacter::APlayerCharacter()
     GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 }
 
+void APlayerCharacter::PossessedBy(AController* NewController)
+{
+    Super::PossessedBy(NewController);
+
+    if (CharacterAbilitySystemComponent && CharacterAttributeSet)
+    {
+        const FString ASCText = FString::Printf(TEXT("Owner Actor: %s, AvatarActor: %s"), *CharacterAbilitySystemComponent->GetOwnerActor()->GetActorLabel(), *CharacterAbilitySystemComponent->GetAvatarActor()->GetActorLabel());
+        Debug::Print(TEXT(" 어빌리티 시스템 ") + ASCText, FColor::Green);
+        Debug::Print(TEXT(" CharacterAttributeSet 어빌리티 시스템 ") + ASCText);
+
+    }
+}
+
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     checkf(InputConfigDataAsset, TEXT("Forgot to assign a valid data asset as input config"));
@@ -57,7 +71,6 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Debug::Print(TEXT("Working"));
 }
 
 void APlayerCharacter::Input_Move(const FInputActionValue& InputActionValue)

@@ -1,4 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
 
@@ -14,7 +13,8 @@ public class rpg_prac : ModuleRules
 			"InputCore", 
 			"EnhancedInput",
 			"GameplayTags",
-			"EnhancedInput"});
+			"EnhancedInput",
+			"GameplayTasks"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
