@@ -8,6 +8,7 @@
 
 class UCharacterAbilitySystemComponent;
 class UCharacterAttributeSet;
+class UDataAsset_StartUpDataBase;
 UCLASS()
 class RPG_PRAC_API ACharacterBase : public ACharacter, public IAbilitySystemInterface
 {
@@ -16,7 +17,7 @@ class RPG_PRAC_API ACharacterBase : public ACharacter, public IAbilitySystemInte
 public:
 	ACharacterBase();
 
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 protected:
 
@@ -27,6 +28,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	UCharacterAttributeSet* CharacterAttributeSet;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "CharacterData")
+	TSoftObjectPtr<UDataAsset_StartUpDataBase> CharacterStartUpData;
+
 public:
 	FORCEINLINE UCharacterAbilitySystemComponent* GetCharacterAbilitySystemComponent() const { return CharacterAbilitySystemComponent; }
 

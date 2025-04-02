@@ -14,7 +14,7 @@ class RPG_PRAC_API UCharacterBaseAnimInstance : public URpgBaseAnimInstance
 	
 public:
 	virtual void NativeInitializeAnimation() override;
-	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds);
+	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
 
 protected:
 

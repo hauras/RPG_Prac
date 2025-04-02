@@ -9,7 +9,7 @@
 #include "Components/Input/RpgInputComponent.h"
 #include "RpgGameplayTags.h"
 #include "AbilitySystem/CharacterAbilitySystemComponent.h"
-
+#include "DataAssets/StartUpData/DataAsset_PlayerStartUpData.h"
 #include "RpgDebugHelper.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -41,12 +41,12 @@ void APlayerCharacter::PossessedBy(AController* NewController)
 {
     Super::PossessedBy(NewController);
 
-    if (CharacterAbilitySystemComponent && CharacterAttributeSet)
+    if (!CharacterStartUpData.IsNull())
     {
-        const FString ASCText = FString::Printf(TEXT("Owner Actor: %s, AvatarActor: %s"), *CharacterAbilitySystemComponent->GetOwnerActor()->GetActorLabel(), *CharacterAbilitySystemComponent->GetAvatarActor()->GetActorLabel());
-        Debug::Print(TEXT(" 어빌리티 시스템 ") + ASCText, FColor::Green);
-        Debug::Print(TEXT(" CharacterAttributeSet 어빌리티 시스템 ") + ASCText);
-
+        if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.LoadSynchronous())
+        {
+            LoadedData->GiveToAbilitySystemComponent(CharacterAbilitySystemComponent);
+        }
     }
 }
 
