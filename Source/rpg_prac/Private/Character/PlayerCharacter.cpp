@@ -10,6 +10,9 @@
 #include "RpgGameplayTags.h"
 #include "AbilitySystem/CharacterAbilitySystemComponent.h"
 #include "DataAssets/StartUpData/DataAsset_PlayerStartUpData.h"
+#include "Components/Combat/PlayerCombatComponent.h"
+
+
 #include "RpgDebugHelper.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -20,7 +23,7 @@ APlayerCharacter::APlayerCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-    //안녕
+
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
     CameraBoom->SetupAttachment(GetRootComponent());
     CameraBoom->TargetArmLength = 200.f;
@@ -35,6 +38,8 @@ APlayerCharacter::APlayerCharacter()
     GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
     GetCharacterMovement()->MaxWalkSpeed = 400.f;
     GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+
+    PlayerCombatComponent = CreateDefaultSubobject<UPlayerCombatComponent>(TEXT("PlayerCombatComponent"));
 }
 
 void APlayerCharacter::PossessedBy(AController* NewController)
@@ -64,7 +69,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
     RpgInputComponent->BindNativeInputAction(InputConfigDataAsset, RpgGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
     RpgInputComponent->BindNativeInputAction(InputConfigDataAsset, RpgGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
-
+    RpgInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 }
 
 void APlayerCharacter::BeginPlay()
@@ -107,4 +112,15 @@ void APlayerCharacter::Input_Look(const FInputActionValue& InputActionValue)
     {
         AddControllerPitchInput(LookAxisVector.Y);
     }
+}
+
+void APlayerCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
+{
+    CharacterAbilitySystemComponent->OnAbilityInputPressed(InInputTag);
+}
+
+void APlayerCharacter::Input_AbilityInputReleased(FGameplayTag InInputTag)
+{
+    CharacterAbilitySystemComponent->OnAbilityInputReleased(InInputTag);
+
 }

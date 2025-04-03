@@ -13,4 +13,8 @@ class RPG_PRAC_API UCharacterAbilitySystemComponent : public UAbilitySystemCompo
 {
 	GENERATED_BODY()
 	
+public:
+	void OnAbilityInputPressed(const FGameplayTag& InInputTag);
+	void OnAbilityInputReleased(const FGameplayTag& InInputTag);
+
 };

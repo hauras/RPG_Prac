@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
+#include "Components/Combat/PawnCombatComponent.h"
 
 void UCharacterGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
@@ -51,7 +52,14 @@ void UCharacterGameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle
 				FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, true);
 				SpawnedWeapon->AttachToComponent(Mesh, AttachRules, WeaponAttachSocketName);
 
-				// 필요하다면 초기화 로직 추가 가능
+			}
+		}
+
+		if (UPawnCombatComponent* CombatComponent = GetPawnCombatComponentFromActorInfo())
+		{
+			if (WeaponTagToRegister.IsValid())
+			{
+				CombatComponent->RegisterSpawnWeapon(WeaponTagToRegister, SpawnedWeapon, bRegisterAsEquippedWeapon);
 			}
 		}
 	}
@@ -74,4 +82,14 @@ void UCharacterGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Hand
 		SpawnedWeapon->Destroy();
 		SpawnedWeapon = nullptr;
 	}
+}
+
+UPawnCombatComponent* UCharacterGameplayAbility::GetPawnCombatComponentFromActorInfo() const
+{
+	return GetAvatarActorFromActorInfo()->FindComponentByClass< UPawnCombatComponent>();
+}
+
+UCharacterAbilitySystemComponent* UCharacterGameplayAbility::GetCharacterAbilitySystemComponentFromActionInfo() const
+{
+	return Cast<UCharacterAbilitySystemComponent>(CurrentActorInfo->AbilitySystemComponent);
 }

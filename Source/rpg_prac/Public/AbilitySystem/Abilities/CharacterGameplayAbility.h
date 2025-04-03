@@ -5,7 +5,8 @@
 #include "CharacterGameplayAbility.generated.h"
 
 class AWeaponBase;
-
+class UPawnCombatComponent;
+class UCharacterAbilitySystemComponent;
 UENUM(BlueprintType)
 enum class ECharacterAbilityActivationPolicy : uint8
 {
@@ -41,4 +42,16 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	FName WeaponAttachSocketName = "AxeBackSocket";
+
+	UFUNCTION(BlueprintPure, Category = "Character|Ability")
+	UPawnCombatComponent* GetPawnCombatComponentFromActorInfo() const;
+
+	UFUNCTION(BlueprintPure, Category = "Character|Ability")
+	UCharacterAbilitySystemComponent* GetCharacterAbilitySystemComponentFromActionInfo() const;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon|Register")
+	FGameplayTag WeaponTagToRegister;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon|Register")
+	bool bRegisterAsEquippedWeapon = false;
 };
